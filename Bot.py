@@ -1,28 +1,31 @@
 import discord
+from discord.ext import commands
 from bot_mantik import gen_pass
 
-# İstekler değişkeni botun yetkilerini saklar
+
+
 intents = discord.Intents.default()
-# Mesaj okuma yetkisini etkinleştirme
 intents.message_content = True
-# Bir bot oluşturma ve yetkileri aktarma
-client = discord.Client(intents=intents)
 
-@client.event
+bot = commands.Bot(command_prefix='$', intents=intents)
+
+@bot.event
 async def on_ready():
-    print(f'{client.user} olarak giriş yapıldı')
+    print(f'{bot.user} olarak giriş yaptık')
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-    if message.content.startswith('$hello'):
-        await message.channel.send("Merhaba!")
-    elif message.content.startswith('$bye'):
-        await message.channel.send("\U0001f642")
-    elif  message.content.startswith('$sifre'):
-        await message.channel.send(gen_pass(10))
-    else:
-        await message.channel.send("Şifreniz: " + gen_pass(10))
+@bot.command()
+async def hello(ctx):
+    await ctx.send(f'Merhaba {bot.user}! Ben bir botum!')
 
-client.run("token")
+@bot.command()
+async def pasw(ctx):
+    await ctx.send(gen_pass(10))
+
+
+
+bot.run("Sizin tokeniniz")
+
+
+
+
+
